@@ -32,6 +32,11 @@ class DualshockInterface:
         dualshock_lib.DualshockInterface_getBtnCross.argtypes = [ctypes.c_void_p]
         dualshock_lib.DualshockInterface_getBtnCross.restype = Event
         return dualshock_lib.DualshockInterface_getBtnCross(self.obj)
+    
+    def getAxisR2(self) -> Event:
+        dualshock_lib.DualshockInterface_getAxisR2.argtypes = [ctypes.c_void_p]
+        dualshock_lib.DualshockInterface_getAxisR2.restype = Event
+        return dualshock_lib.DualshockInterface_getAxisR2(self.obj)
 
 
 dualshock = DualshockInterface('/dev/input/event4')
@@ -39,8 +44,5 @@ dualshock = DualshockInterface('/dev/input/event4')
 dualshock.start_listening()
 
 while True:
-    cross = dualshock.getBtnCross()
-    if cross.value == 1:
-        print('Cross pressed')
-    elif cross.value == 0:
-        print('Cross released')
+    r2_axis = dualshock.getAxisR2()
+    print(r2_axis.value)
