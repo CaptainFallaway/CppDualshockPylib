@@ -1,7 +1,7 @@
 import ctypes
 from time import sleep
 
-dualshock_lib = ctypes.CDLL('./libdualshockinterface.so')
+dualshock_lib = ctypes.CDLL('./build/libdualshockinterface.so')
 
 
 class Event(ctypes.Structure):
