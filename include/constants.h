@@ -1,3 +1,34 @@
+// Constants
+
+const short EV_KEY = 1;
+const short EV_ABS = 3;
+
+const short BTN_CROSS = 304;
+const short BTN_CIRCLE = 305;
+const short BTN_SQUARE = 308;
+const short BTN_TRIANGLE = 307;
+const short BTN_L1 = 310;
+const short BTN_L2 = 312;
+const short BTN_L3 = 317;
+const short BTN_R1 = 311;
+const short BTN_R2 = 313;
+const short BTN_R3 = 318;
+const short BTN_SHARE = 314;
+const short BTN_OPTIONS = 315;
+const short BTN_PS = 316;
+
+const short ABS_X = 0;
+const short ABS_Y = 1;
+const short ABS_Z = 2;
+const short ABS_RX = 3;
+const short ABS_RY = 4;
+const short ABS_RZ = 5;
+const short ABS_HAT0X = 16;
+const short ABS_HAT0Y = 17;
+
+/*
+Evtest output for the dualshock4:
+
 Supported events:
   Event type 0 (EV_SYN)
   Event type 1 (EV_KEY)
@@ -62,3 +93,4 @@ Supported events:
     Event code 89 (FF_TRIANGLE)
     Event code 90 (FF_SINE)
     Event code 96 (FF_GAIN)
+*/
