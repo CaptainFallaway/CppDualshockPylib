@@ -23,11 +23,7 @@ class EventDataRegistrar {
 class DualshockInterface {
 public:
     // Constructor and destructor
-    DualshockInterface(const std::string& eventStreamPath) : eventStreamPath(eventStreamPath) {
-        stopRequested = false;
-    
-        btnCross.set(EventData());
-    };
+    DualshockInterface(const std::string& eventStreamPath);
 
     ~DualshockInterface();
 
