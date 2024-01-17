@@ -245,8 +245,4 @@ extern "C" {
     EventData DualshockInterface_getAxisDPadY(DualshockInterface* dualshockInterface) {
         return dualshockInterface->axisDPadY.get();
     }
-
-    void DualshockInterface_delete (DualshockInterface* dualshockInterface) {
-        delete dualshockInterface;
-    }
 }
