@@ -13,7 +13,14 @@ void EventDataRegistrar::set(EventData& eventData) {
 
 EventData EventDataRegistrar::get(bool clearRegister) {
     std::lock_guard<std::mutex> lock(mutex);
-    return eventData;
+    // Copy the eventData
+    EventData eventDataCopy = eventData;
+
+    if (clearRegister) {
+        eventData = EventData();
+    }
+
+    return eventDataCopy;
 }
 
 
