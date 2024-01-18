@@ -1,48 +1,11 @@
-import ctypes
-from time import sleep
+from dualshock_controller import DualshockInterface, Event  # noqa: F401
 
-dualshock_lib = ctypes.CDLL('./build/libdualshockinterface.so')
+interface = DualshockInterface("/dev/input/event4")
 
-
-class Event(ctypes.Structure):
-    _fields_ = [
-        ('timestamp', ctypes.c_long),
-        ('timestamp_decimal', ctypes.c_long),
-        ('type', ctypes.c_short),
-        ('code', ctypes.c_short),
-        ('value', ctypes.c_int),
-    ]
-
-
-class DualshockInterface:
-    def __init__(self, event_stream_path):
-        dualshock_lib.DualshockInterface_new.argtypes = [ctypes.c_char_p]
-        dualshock_lib.DualshockInterface_new.restype = ctypes.c_void_p
-        self.obj = dualshock_lib.DualshockInterface_new(event_stream_path.encode('utf-8'))
-
-    def start_listening(self):
-        dualshock_lib.DualshockInterface_startListening.argtypes = [ctypes.c_void_p]
-        dualshock_lib.DualshockInterface_startListening(self.obj)
-
-    def stop(self):
-        dualshock_lib.DualshockInterface_stop.argtypes = [ctypes.c_void_p]
-        dualshock_lib.DualshockInterface_stop(self.obj)
-
-    def getBtnCross(self) -> Event:
-        dualshock_lib.DualshockInterface_getBtnCross.argtypes = [ctypes.c_void_p]
-        dualshock_lib.DualshockInterface_getBtnCross.restype = Event
-        return dualshock_lib.DualshockInterface_getBtnCross(self.obj)
-    
-    def getAxisR2(self) -> Event:
-        dualshock_lib.DualshockInterface_getAxisR2.argtypes = [ctypes.c_void_p]
-        dualshock_lib.DualshockInterface_getAxisR2.restype = Event
-        return dualshock_lib.DualshockInterface_getAxisR2(self.obj)
-
-
-dualshock = DualshockInterface('/dev/input/event4')
-
-dualshock.start_listening()
+interface.start_listening()
 
 while True:
-    r2_axis = dualshock.getAxisR2()
-    print(r2_axis.value)
+    event = interface.get_btn_cross()
+
+    if event is not None:
+        print(event)
