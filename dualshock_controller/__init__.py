@@ -32,7 +32,7 @@ class DualshockInterface:
 
     _NULL_EVENT = Event(0, 0, 0, 0, 0)
 
-    def __init__(self, event_stream_path: str, reset_registers: bool = True) -> None:
+    def __init__(self, event_stream_path: str) -> None:
         """
         Python wrapper for the DualshockInterface class in C++
 
@@ -42,7 +42,6 @@ class DualshockInterface:
 
         Args:
             event_stream_path (str): The path to the event stream file
-            reset_registers (bool, optional): If True, resets the event fetched from the event register to None; else same Event.
         """
 
         if os.path.exists(event_stream_path) is False:
@@ -52,7 +51,6 @@ class DualshockInterface:
             raise FileNotFoundError('The library file does not exist in ./cpp/build/libdualshockinterface.so')
 
         self.loop_is_running = False
-        self._reset_registers = reset_registers
 
         # Loading the library
         self.lib = ctypes.CDLL('./dualshock_controller/cpp/build/libdualshockinterface.so')
@@ -73,7 +71,7 @@ class DualshockInterface:
         self.lib.DualshockInterface_stop(self.obj)
         self.loop_is_running = False
 
-    def _get_event(self, event_name: str) -> Union[Event, None]:
+    def _get_event(self, event_name: str, reset_to_none: bool) -> Union[Event, None]:
         if self.loop_is_running is False:
             raise RuntimeError('The listening loop is not running. Call start_listening() first')
 
@@ -81,72 +79,69 @@ class DualshockInterface:
         func.argtypes = [ctypes.c_void_p, ctypes.c_bool]
         func.restype = Event
 
-        returned = func(self.obj, self._reset_registers)
+        returned = func(self.obj, reset_to_none)
 
-        if returned == self._NULL_EVENT:
-            return None
+        return returned if returned != self._NULL_EVENT else None
 
-        return returned
+    def get_btn_cross(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('BtnCross', reset_to_none)
 
-    def get_btn_cross(self) -> Event:
-        return self._get_event('BtnCross')
+    def get_btn_circle(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('BtnCircle', reset_to_none)
 
-    def get_btn_circle(self) -> Event:
-        return self._get_event('BtnCircle')
+    def get_btn_square(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('BtnSquare', reset_to_none)
 
-    def get_btn_square(self) -> Event:
-        return self._get_event('BtnSquare')
+    def get_btn_triangle(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('BtnTriangle', reset_to_none)
 
-    def get_btn_triangle(self) -> Event:
-        return self._get_event('BtnTriangle')
+    def get_btn_l1(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('BtnL1', reset_to_none)
 
-    def get_btn_l1(self) -> Event:
-        return self._get_event('BtnL1')
+    def get_btn_l2(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('BtnL2', reset_to_none)
 
-    def get_btn_l2(self) -> Event:
-        return self._get_event('BtnL2')
+    def get_btn_l3(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('BtnL3', reset_to_none)
 
-    def get_btn_l3(self) -> Event:
-        return self._get_event('BtnL3')
+    def get_btn_r1(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('BtnR1', reset_to_none)
 
-    def get_btn_r1(self) -> Event:
-        return self._get_event('BtnR1')
+    def get_btn_r2(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('BtnR2', reset_to_none)
 
-    def get_btn_r2(self) -> Event:
-        return self._get_event('BtnR2')
+    def get_btn_r3(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('BtnR3', reset_to_none)
 
-    def get_btn_r3(self) -> Event:
-        return self._get_event('BtnR3')
+    def get_btn_share(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('BtnShare', reset_to_none)
 
-    def get_btn_share(self) -> Event:
-        return self._get_event('BtnShare')
+    def get_btn_options(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('BtnOptions', reset_to_none)
 
-    def get_btn_options(self) -> Event:
-        return self._get_event('BtnOptions')
+    def get_btn_ps(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('BtnPS', reset_to_none)
 
-    def get_btn_ps(self) -> Event:
-        return self._get_event('BtnPS')
+    def get_axis_left_stick_x(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('AxisLeftStickX', reset_to_none)
 
-    def get_axis_left_stick_x(self) -> Event:
-        return self._get_event('AxisLeftStickX')
+    def get_axis_left_stick_y(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('AxisLeftStickY', reset_to_none)
 
-    def get_axis_left_stick_y(self) -> Event:
-        return self._get_event('AxisLeftStickY')
+    def get_axis_right_stick_x(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('AxisRightStickX', reset_to_none)
 
-    def get_axis_right_stick_x(self) -> Event:
-        return self._get_event('AxisRightStickX')
+    def get_axis_right_stick_y(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('AxisRightStickY', reset_to_none)
 
-    def get_axis_right_stick_y(self) -> Event:
-        return self._get_event('AxisRightStickY')
+    def get_axis_l2(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('AxisL2', reset_to_none)
 
-    def get_axis_l2(self) -> Event:
-        return self._get_event('AxisL2')
+    def get_axis_r2(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('AxisR2', reset_to_none)
 
-    def get_axis_r2(self) -> Event:
-        return self._get_event('AxisR2')
+    def get_axis_dpad_x(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('AxisDPadX', reset_to_none)
 
-    def get_axis_dpad_x(self) -> Event:
-        return self._get_event('AxisDPadX')
-
-    def get_axis_dpad_y(self) -> Event:
-        return self._get_event('AxisDPadY')
+    def get_axis_dpad_y(self, reset_to_none: bool = False) -> Union[Event, None]:
+        return self._get_event('AxisDPadY', reset_to_none)
