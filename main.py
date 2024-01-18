@@ -16,8 +16,13 @@ funcs = list(
 )
 
 while True:
-    for func in funcs:
-        event = getattr(interface, func)()
-        if event is not None:
-            print(event)
-            print("\n---------------------------------\n")
+    # for func in funcs:
+    #     event = getattr(interface, func)(True)
+    #     if event is not None:
+    #         print(event)
+    #         print("\n---------------------------------\n")
+
+    event = interface.get_btn_cross(reset_to_none=True)
+
+    if event is not None:
+        print(event)
