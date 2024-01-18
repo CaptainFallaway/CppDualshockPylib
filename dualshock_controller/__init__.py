@@ -140,7 +140,7 @@ class DualshockInterface:
         return self._get_event('AxisR2')
 
     def get_axis_dpad_x(self) -> Event:
-        return self._get_event('AxisDpadX')
+        return self._get_event('AxisDPadX')
 
     def get_axis_dpad_y(self) -> Event:
-        return self._get_event('AxisDpadY')
+        return self._get_event('AxisDPadY')
