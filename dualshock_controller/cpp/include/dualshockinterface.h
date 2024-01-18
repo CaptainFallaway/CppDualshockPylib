@@ -14,7 +14,7 @@ class EventDataRegistrar {
     public:
         EventDataRegistrar();
         void set(EventData& eventData);
-        EventData get();
+        EventData get(bool clearRegister);
     private:
         EventData eventData;
         std::mutex mutex;
@@ -22,12 +22,9 @@ class EventDataRegistrar {
 
 class DualshockInterface {
 public:
-    // Constructor and destructor
     DualshockInterface(const std::string& eventStreamPath);
 
     ~DualshockInterface();
-
-    // EventData data handlers
 
     EventDataRegistrar btnCross;
     EventDataRegistrar btnCircle;
@@ -52,23 +49,17 @@ public:
     EventDataRegistrar axisDPadX;
     EventDataRegistrar axisDPadY;
 
-    // Method to start the C++ loop in a separate thread
     void startListening();
 
-    // Method to stop the C++ loop
     void stop();
 private:
-    // EventData stream path
     const std::string eventStreamPath;
 
-    // EventData stream object
     std::ifstream eventStream;
 
-    std::thread loopThread;  // Thread for the C++ loop
-    std::mutex dataMutex;    // Mutex for synchronizing data access
-    bool stopRequested;      // Flag to signal the loop to stop
+    std::thread loopThread;
+    bool stopRequested;
 
-    // Method for the C++ loop
     void loop();
 
     void handleKeyEvent(EventData& event);

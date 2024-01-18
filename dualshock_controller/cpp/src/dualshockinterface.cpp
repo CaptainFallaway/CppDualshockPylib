@@ -4,7 +4,6 @@
 #include <iostream>
 
 
-// Initialize the EventDataRegistrar with an empty EventData struct and a mutex used for thread safety when setting and getting the data
 EventDataRegistrar::EventDataRegistrar() : eventData(), mutex() {}
 
 void EventDataRegistrar::set(EventData& eventData) {
@@ -12,13 +11,12 @@ void EventDataRegistrar::set(EventData& eventData) {
     this->eventData = eventData;
 }
 
-EventData EventDataRegistrar::get() {
+EventData EventDataRegistrar::get(bool clearRegister) {
     std::lock_guard<std::mutex> lock(mutex);
     return eventData;
 }
 
 
-// Initialize the DualshockInterface
 DualshockInterface::DualshockInterface(const std::string& eventStreamPath) : eventStreamPath(eventStreamPath), stopRequested(false) {};
 
 DualshockInterface::~DualshockInterface() {
@@ -41,7 +39,7 @@ void DualshockInterface::stop() {
 void DualshockInterface::loop() {
     // The loop that runs in a separate thread
 
-    eventStream.open(eventStreamPath, std::ios::in | std::ios::binary);  // Open the event stream
+    eventStream.open(eventStreamPath, std::ios::in | std::ios::binary);
 
     if (!eventStream.is_open() || eventStream.fail()) {
         throw std::runtime_error("Event stream failed to open!\nSee if controller has disconnected or changed event stream path.");
@@ -51,7 +49,6 @@ void DualshockInterface::loop() {
     // Initialize a EventData so it can be mutated in the loop
     EventData event;
 
-    // Loop until stop is requested
     while (!stopRequested) {
         if (eventStream.fail()) {
             throw std::runtime_error("Event stream failed to read!\nSee if controller has disconnected or changed event stream path.");
@@ -169,87 +166,87 @@ extern "C" {
         dualshockInterface->stop();
     }
 
-    EventData DualshockInterface_getBtnCross(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->btnCross.get();
+    EventData DualshockInterface_getBtnCross(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->btnCross.get(clearRegister);
     }
 
-    EventData DualshockInterface_getBtnCircle(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->btnCircle.get();
+    EventData DualshockInterface_getBtnCircle(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->btnCircle.get(clearRegister);
     }
 
-    EventData DualshockInterface_getBtnSquare(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->btnSquare.get();
+    EventData DualshockInterface_getBtnSquare(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->btnSquare.get(clearRegister);
     }
 
-    EventData DualshockInterface_getBtnTriangle(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->btnTriangle.get();
+    EventData DualshockInterface_getBtnTriangle(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->btnTriangle.get(clearRegister);
     }
 
-    EventData DualshockInterface_getBtnL1(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->btnL1.get();
+    EventData DualshockInterface_getBtnL1(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->btnL1.get(clearRegister);
     }
 
-    EventData DualshockInterface_getBtnL2(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->btnL2.get();
+    EventData DualshockInterface_getBtnL2(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->btnL2.get(clearRegister);
     }
 
-    EventData DualshockInterface_getBtnL3(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->btnL3.get();
+    EventData DualshockInterface_getBtnL3(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->btnL3.get(clearRegister);
     }
 
-    EventData DualshockInterface_getBtnR1(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->btnR1.get();
+    EventData DualshockInterface_getBtnR1(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->btnR1.get(clearRegister);
     }
 
-    EventData DualshockInterface_getBtnR2(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->btnR2.get();
+    EventData DualshockInterface_getBtnR2(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->btnR2.get(clearRegister);
     }
 
-    EventData DualshockInterface_getBtnR3(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->btnR3.get();
+    EventData DualshockInterface_getBtnR3(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->btnR3.get(clearRegister);
     }
 
-    EventData DualshockInterface_getBtnShare(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->btnShare.get();
+    EventData DualshockInterface_getBtnShare(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->btnShare.get(clearRegister);
     }
 
-    EventData DualshockInterface_getBtnOptions(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->btnOptions.get();
+    EventData DualshockInterface_getBtnOptions(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->btnOptions.get(clearRegister);
     }
 
-    EventData DualshockInterface_getBtnPS(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->btnPS.get();
+    EventData DualshockInterface_getBtnPS(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->btnPS.get(clearRegister);
     }
 
-    EventData DualshockInterface_getAxisLeftStickX(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->axisLeftStickX.get();
+    EventData DualshockInterface_getAxisLeftStickX(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->axisLeftStickX.get(clearRegister);
     }
 
-    EventData DualshockInterface_getAxisLeftStickY(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->axisLeftStickY.get();
+    EventData DualshockInterface_getAxisLeftStickY(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->axisLeftStickY.get(clearRegister);
     }
 
-    EventData DualshockInterface_getAxisRightStickX(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->axisRightStickX.get();
+    EventData DualshockInterface_getAxisRightStickX(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->axisRightStickX.get(clearRegister);
     }
 
-    EventData DualshockInterface_getAxisRightStickY(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->axisRightStickY.get();
+    EventData DualshockInterface_getAxisRightStickY(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->axisRightStickY.get(clearRegister);
     }
 
-    EventData DualshockInterface_getAxisL2(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->axisL2.get();
+    EventData DualshockInterface_getAxisL2(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->axisL2.get(clearRegister);
     }
 
-    EventData DualshockInterface_getAxisR2(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->axisR2.get();
+    EventData DualshockInterface_getAxisR2(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->axisR2.get(clearRegister);
     }
 
-    EventData DualshockInterface_getAxisDPadX(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->axisDPadX.get();
+    EventData DualshockInterface_getAxisDPadX(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->axisDPadX.get(clearRegister);
     }
 
-    EventData DualshockInterface_getAxisDPadY(DualshockInterface* dualshockInterface) {
-        return dualshockInterface->axisDPadY.get();
+    EventData DualshockInterface_getAxisDPadY(DualshockInterface* dualshockInterface, bool clearRegister) {
+        return dualshockInterface->axisDPadY.get(clearRegister);
     }
 }
