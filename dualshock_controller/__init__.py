@@ -78,7 +78,7 @@ class DualshockInterface:
             raise RuntimeError('The listening loop is not running. Call start_listening() first')
 
         func = self.lib['DualshockInterface_get' + event_name]
-        func.argtypes = [ctypes.c_void_p]
+        func.argtypes = [ctypes.c_void_p, ctypes.c_bool]
         func.restype = Event
 
         returned = func(self.obj, self._reset_registers)
