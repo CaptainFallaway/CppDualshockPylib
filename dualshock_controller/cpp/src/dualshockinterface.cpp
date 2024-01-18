@@ -53,12 +53,14 @@ void DualshockInterface::loop() {
 
     // Loop until stop is requested
     while (!stopRequested) {
+        if (eventStream.fail()) {
+            throw std::runtime_error("Event stream failed to read!\nSee if controller has disconnected or changed event stream path.");
+            return;
+        }
+
         eventStream.read(reinterpret_cast<char*>(&event), sizeof(EventData));
 
-        std::cout << event.timestamp << " " << event.timestamp_decimal << " " << event.type << " " << event.code << " " << event.value << std::endl;
-
-        switch (event.type)
-        {
+        switch (event.type) {
             case (EV_KEY):
                 handleKeyEvent(event);
                 break;
@@ -72,8 +74,7 @@ void DualshockInterface::loop() {
 }
 
 void DualshockInterface::handleKeyEvent(EventData& event) {
-    switch (event.code)
-    {
+    switch (event.code) {
         case (BTN_CROSS):
             btnCross.set(event);
             break;
@@ -119,8 +120,7 @@ void DualshockInterface::handleKeyEvent(EventData& event) {
 }
 
 void DualshockInterface::handleAxisEvent(EventData& event) {
-    switch (event.code)
-    {
+    switch (event.code) {
         case (ABS_X):
             axisLeftStickX.set(event);
             break;

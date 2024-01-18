@@ -4,6 +4,8 @@ interface = DualshockInterface("/dev/input/event4")
 
 interface.start_listening()
 
+print("Started listening")
+
 while True:
     event = interface.get_btn_cross()
 
