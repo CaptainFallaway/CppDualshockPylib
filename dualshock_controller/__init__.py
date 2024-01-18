@@ -20,7 +20,7 @@ class Event(ctypes.Structure):
             self.timestamp, self.timestamp_decimal, self.type, self.code, self.value
             )
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: "Event") -> bool:
         return self.timestamp == other.timestamp and \
             self.timestamp_decimal == other.timestamp_decimal and \
             self.type == other.type and \
