@@ -50,7 +50,6 @@ void DualshockInterface::loop() {
 
     if (!eventStream.is_open() || eventStream.fail()) {
         throw std::runtime_error("Event stream failed to open!\nSee if controller has disconnected or changed event stream path.");
-        return;
     }
 
     // Initialize a EventData so it can be mutated in the loop
@@ -59,7 +58,6 @@ void DualshockInterface::loop() {
     while (!stopRequested) {
         if (eventStream.fail()) {
             throw std::runtime_error("Event stream failed to read!\nSee if controller has disconnected or changed event stream path.");
-            return;
         }
 
         eventStream.read(reinterpret_cast<char*>(&event), sizeof(EventData));
