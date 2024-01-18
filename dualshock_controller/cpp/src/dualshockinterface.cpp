@@ -1,6 +1,8 @@
 #include "constants.h"
 #include "dualshockinterface.h"
 
+#include <iostream>
+
 
 // Initialize the EventDataRegistrar with an empty EventData struct and a mutex used for thread safety when setting and getting the data
 EventDataRegistrar::EventDataRegistrar() : eventData(), mutex() {}
@@ -52,6 +54,8 @@ void DualshockInterface::loop() {
     // Loop until stop is requested
     while (!stopRequested) {
         eventStream.read(reinterpret_cast<char*>(&event), sizeof(EventData));
+
+        std::cout << event.timestamp << " " << event.timestamp_decimal << " " << event.type << " " << event.code << " " << event.value << std::endl;
 
         switch (event.type)
         {
