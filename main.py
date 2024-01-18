@@ -8,8 +8,16 @@ interface.start_listening()
 
 print("Started listening")
 
-while True:
-    event = interface.get_btn_cross()
+funcs = list(
+    filter(
+        lambda x: x.startswith("get_"),
+        interface.__dir__()
+    )
+)
 
-    if event is not None:
-        print(event)
+while True:
+    for func in funcs:
+        event = getattr(interface, func)()
+        if event is not None:
+            print(event)
+            print("\n---------------------------------\n")
