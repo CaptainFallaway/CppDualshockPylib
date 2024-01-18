@@ -29,17 +29,22 @@ class Event(ctypes.Structure):
 
 
 class DualshockInterface:
-    """
-    Python wrapper for the DualshockInterface class in C++
-
-    Uses the built library in ./cpp/build/libdualshockinterface.so
-
-    All methods get the most previous registered event for the specified event.
-    """
 
     _NULL_EVENT = Event(0, 0, 0, 0, 0)
 
-    def __init__(self, event_stream_path: str) -> None:
+    def __init__(self, event_stream_path: str, reset_registers: bool = True) -> None:
+        """
+        Python wrapper for the DualshockInterface class in C++
+
+        Uses the built library at ./cpp/build/libdualshockinterface.so
+
+        All methods get the previous registered event from the controller.
+
+        Args:
+            event_stream_path (str): The path to the event stream file
+            reset_registers (bool, optional): If True, resets the event fetched from the event register to None; else same Event.
+        """
+
         if os.path.exists(event_stream_path) is False:
             raise FileNotFoundError('The event stream path does not exist')
 
@@ -47,6 +52,7 @@ class DualshockInterface:
             raise FileNotFoundError('The library file does not exist in ./cpp/build/libdualshockinterface.so')
 
         self.loop_is_running = False
+        self._reset_registers = reset_registers
 
         # Loading the library
         self.lib = ctypes.CDLL('./dualshock_controller/cpp/build/libdualshockinterface.so')
@@ -75,7 +81,7 @@ class DualshockInterface:
         func.argtypes = [ctypes.c_void_p]
         func.restype = Event
 
-        returned = func(self.obj)
+        returned = func(self.obj, self._reset_registers)
 
         if returned == self._NULL_EVENT:
             return None
