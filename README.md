@@ -1,5 +1,12 @@
 # CppDualshockPylib
 
+## Compile the cpp library
+
+I am expecting you to have sshed into a EV3 robot with the EV3dev OS and cloned / downloaded the project.
+
+1. cd into the cpp directory inside of the dualshock_controller folder
+2. run the build script with ./build.sh
+
 ## Example of use
 
 ```py
