@@ -13,7 +13,9 @@ I am expecting you to have sshed into a EV3 robot with the EV3dev OS and cloned 
 from dualshock_controller import DualshockInterface, Event
 
 def main():
-  controller = DualshockInterface()
+  # The path you see is where the device stream file is in the file system for the dualshock controller
+  # You can use Evtest command or ls the /dev/input folder to see what can be put below
+  controller = DualshockInterface("/dev/input/event4")
   controller.start_listening()
 
   while True:
